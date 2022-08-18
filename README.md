@@ -136,8 +136,41 @@ Hacer esto desde la consola es solo una muestra de como podemos interactuar con 
 
 # Apiviews
 
-## POST
+El objetivo de una api es poder integrar nuestra db a la internet y el lenguaje de la internet es el protocolo HTTP, es por esto que tenemos que adaptar nuestras vistas de django para incorporar los serializadores que traducen filas de la db a json.
+
+
 ## GET
+
+Vamos a generar una ruta de nuestro sitio para que comunicar el serializador, como vimos para django todas las conexiones son 'vistas', por eso vamos a agregar esto a `views.py`:
+
+
+```
+# importamos serializador y modelo
+
+from .serializers import SucursalesSerializer 
+from .models import Sucursales
+
+from rest_framework.views import APIView 
+from rest_framework.response import Response 
+from rest_framework import status
+
+# Create your views here.
+class SucursalesLists(APIView):
+    def get(self, request):
+        sucursales = Sucursales.objects.all()
+        serializer = SucursalesSerializer(sucursales,many=True)
+        if sucursales:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+```
+
+Ahora como es un requests GET podemos entrar desde el navegador:
+
+http://127.0.0.1:8000/api/sucursales/
+
+Vemos como respuesta todos las sucursales.
+
+## POST
 ## DELETE
 ## PUT
 
