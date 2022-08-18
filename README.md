@@ -10,7 +10,7 @@
 - [hipervinculos]()
 - [viewsets y routers]()
 
-## instalacion:
+# Instalacion:
 
 ```
 pip3 install djangorestframework
@@ -26,7 +26,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-## serialización
+# Serialización
 
 Entedemos por serializacion la accion de convertir la informacion en la base de datos en json para la respuesta http y tambien nos interesa la relacion inversa, es decir poder impactar en la base de datos a partir de un post json. La idea es generar una API para consultar los movimientos de diferentes usuarixs, asi como creamos un modelo para la tabla de movimientos, vamos a crear un 'serializador' en el archivo `serializers.py`en la misma app de los modelos que querramos disponibilizar en la api.
 
@@ -135,3 +135,12 @@ Esta consulta nos devuelve todos los movimientos del cliente con dni 35913755
 Hacer esto desde la consola es solo una muestra de como podemos interactuar con la db desde estos objetos nuevos, pero la idea es que poder interactuar con requests HTTP como post, get. Empecemos con el POST, vamos a generar una vista que agregue movimientos a la db.
 
 # Apiviews
+
+## POST
+## GET
+## DELETE
+## PUT
+
+# Permisos
+
+
