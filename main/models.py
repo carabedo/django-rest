@@ -8,13 +8,17 @@
 from django.db import models
 
 
+
+
 class Clientes(models.Model):
+    id = models.IntegerField( primary_key=True)
     nombre = models.TextField(blank=True, null=True)
     apellido = models.TextField(blank=True, null=True)
     sexo_id = models.TextField(blank=True, null=True)
     edad = models.IntegerField(blank=True, null=True)
     cliente_id = models.IntegerField(blank=True, null=True)
     categoria = models.TextField(blank=True, null=True)
+    sucursal = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -22,8 +26,9 @@ class Clientes(models.Model):
 
 
 class Cuentas(models.Model):
+    id = models.IntegerField(primary_key=True)
     cliente_id = models.IntegerField(blank=True, null=True)
-    saldo = models.FloatField(blank=True, null=True)
+    saldo = models.IntegerField(blank=True, null=True)
     tipo = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -31,7 +36,24 @@ class Cuentas(models.Model):
         db_table = 'cuentas'
 
 
+
+class Empleados(models.Model):
+    id = models.IntegerField(primary_key=True)
+    nombre = models.TextField(blank=True, null=True)
+    apellido = models.TextField(blank=True, null=True)
+    sexo_id = models.TextField(blank=True, null=True)
+    edad = models.IntegerField(blank=True, null=True)
+    cliente_id = models.IntegerField(blank=True, null=True)
+    categoria = models.TextField(blank=True, null=True)
+    sucursal = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'empleados'
+
+
 class Movimientos(models.Model):
+    id = models.IntegerField(primary_key=True)
     cliente_id = models.IntegerField(blank=True, null=True)
     fecha = models.TextField(blank=True, null=True)
     importe = models.FloatField(blank=True, null=True)
@@ -41,18 +63,34 @@ class Movimientos(models.Model):
         db_table = 'movimientos'
 
 
+class Sucursales(models.Model):
+    id = models.IntegerField(primary_key=True)
+    calle = models.TextField(blank=True, null=True)
+    altura = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'sucursales'
+
+
+        
+
+class ids(models.Model):
+    id = models.IntegerField(primary_key=True)
+    cliente_id = models.IntegerField(blank=True, null=False)
+    username = models.TextField(blank=True, null=False)
+    class Meta:            
+        db_table = 'ids'
+
+
+
 class Prestamos(models.Model):
+    id = models.IntegerField(primary_key=True)
     cliente_id = models.TextField(blank=True, null=True)
     monto = models.TextField(blank=True, null=True)
     fecha_inicio = models.TextField(blank=True, null=True)
     tipo = models.TextField(blank=True, null=True)
+
     class Meta:
-        managed = False
+        
         db_table = 'prestamos'
-
-
-
-class ids(models.Model):
-    cliente_id = models.TextField(blank=True, null=False)
-    username = models.IntegerField(blank=True, null=False)
-

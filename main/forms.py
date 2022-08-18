@@ -12,7 +12,7 @@ class PrestamoForm(forms.Form):
  
 
 class RegistroForm(forms.Form):
-    usuario = forms.CharField(label="usuario", required=True)
+    username= forms.CharField(label="username", required=True)
     cliente_id = forms.CharField(label="cliente_id", required=True)
     email = forms.CharField(label="email", required=False)
     pwd = forms.CharField(label="pwd", required=False)
