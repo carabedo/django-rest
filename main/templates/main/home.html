@@ -1,0 +1,31 @@
+
+<!-- agregamos el bloque extends que tomara el html base-->
+{% extends 'main/base.html' %}
+
+<!-- Agregamos el contenido estatico-->
+
+{% load static %}
+
+<!-- Agregamos el titulo de la home -->
+{% block title %}randomBANK  - Inicio {% endblock %}
+
+<!-- Agregamos la imagen de fondo -->
+{% block background %}{% static 'main/img/home-bg.jpg' %}{% endblock %}
+
+<!-- Agregamos la informacion que queremos en el header-->
+
+{% block headers %}
+    <h1>randomBANK</h1>
+    <span class="subheading">No somos un banco mas.</span>
+{% endblock %}
+
+<!-- indicamos que lo de abajao se dibuje despues del menu armado en la base-->
+{% block content %}
+
+{% if cliente %}
+
+Bienvenido {{cliente.nombre}} {{cliente.apellido }} !
+
+{% endif %}
+
+{% endblock %}
