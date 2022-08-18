@@ -90,3 +90,46 @@ Notar b' y las comillas dobles :
 ```
 b'{"id":0,"calle":"AV. CABILDO","altura":"2040"}'
 ```
+Vamos a crear una nueva sucursal:
+
+```python
+data2={'id': 6, 'calle': 'esmeralda', 'altura': '400'}
+serial2=SucursalesSerializer(data=data2)
+serial2.is_valid()
+# ok!
+serial2.validated_data
+serial2.save()
+# miremos la db...
+```
+
+Podemos ver que hay una nueva sucursal en la db!
+
+Vamos a crear otro serializador, esta  vez de movimientos:
+
+```python
+class MovimientosSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Movimientos
+        #indicamos que use todos los campos
+        fields = "__all__"
+        #les decimos cuales son los de solo lectura 
+```
+
+
+También podemos serializar conjuntos de consultas, para hacerlo simplemente agregamos un indicador `many=True` a los argumentos del serializador.
+(Si modificamos el serializer.py hay que reiniciar la shell)
+
+```python
+
+# filter para devuelva muchos
+# get devuelve uno solo
+
+movimientos = Movimientos.objects.filter(cliente_id=35913755) 
+# agregar many
+serializer = MovimientosSerializer(movimientos,many=True) 
+serializer.data
+```
+
+Esta consulta nos devuelve todos los movimientos del cliente con dni 35913755
+
+Hacer esto desde la consola es solo una muestra de como podemos interactuar con la db desde estos objetos nuevos, pero la idea es que poder interactuar con requests HTTP como post, get. Empecemos con el POST, vamos a generar una vista que agregue movimientos a la db.
