@@ -144,7 +144,7 @@ El objetivo de una api es poder integrar nuestra db a la internet y el lenguaje 
 Vamos a generar una ruta de nuestro sitio para que comunicar el serializador, como vimos para django todas las conexiones son 'vistas', por eso vamos a agregar esto a `views.py`:
 
 
-```
+```python
 # importamos serializador y modelo
 
 from .serializers import SucursalesSerializer 
@@ -164,13 +164,20 @@ class SucursalesLists(APIView):
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 ```
 
+Esta vista es una clase, no una funcion como veniamos laburando, la ventaja es que dentro de esta clase podemos crear funciones que automaticamente responde al tipo de metodo del requests. En este ejemplo era un GET.
+
+
 Ahora como es un requests GET podemos entrar desde el navegador:
 
 http://127.0.0.1:8000/api/sucursales/
 
-Vemos como respuesta todos las sucursales.
+Vemos como respuesta todos las sucursales, podemos probar con postman, con requests de python o con fetch desde el chrome.
 
 ## POST
+
+Ahora queremos generar un nuevo movimiento en la db, necesitamos generar otra vista usando el modelo y el serializador para los movimientos.
+
+
 ## DELETE
 ## PUT
 
