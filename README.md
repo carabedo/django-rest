@@ -143,4 +143,7 @@ Hacer esto desde la consola es solo una muestra de como podemos interactuar con 
 
 # Permisos
 
+# Hipervinculos
+
+# Viewsets y Routers
 
