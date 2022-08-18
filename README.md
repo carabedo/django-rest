@@ -2,11 +2,11 @@
 
 ## indice:
 
-- [instalacion](https://github.com/carabedo/django-restframework#instalacion)
-- [serializadores](https://github.com/carabedo/django-restframework#serialización)
-- [apiviews](https://github.com/carabedo/django-restframework#apiviews)
+- [instalacion](https://github.com/carabedo/django-restk#instalacion)
+- [serializadores](https://github.com/carabedo/django-rest#serialización)
+- [apiviews](https://github.com/carabedo/django-rest#apiviews)
 - [requests GET PUT DELETE]()
-- [permisos](https://github.com/carabedo/django-restframework#permisos)
+- [permisos](https://github.com/carabedo/django-rest#permisos)
 - [hipervinculos]()
 - [viewsets y routers]()
 
