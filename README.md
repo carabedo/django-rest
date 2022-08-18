@@ -33,12 +33,12 @@ Entedemos por serializacion la accion de convertir la informacion en la base de 
 
 ```python
 from rest_framework import serializers 
-from .models import Participantes
+from .models import Sucursales
 
  
-class ParticipantesSerializer(serializers.ModelSerializer):
+class SucursalesSerializer(serializers.ModelSerializer):
      class Meta:
-        model = Participantes
+        model = Sucursales
         #indicamos que use todos los campos
         fields = "__all__"
         #les decimos cuales son los de solo lectura 
@@ -53,27 +53,27 @@ Probemos que esto funciona:
 Ejecutemos el siguiente codigo en la consola de django `python3 manage.py shell`
 
 ```python
-from app_prueba.models import Participantes
-from app_prueba.serializers import ParticipantesSerializer
+from main.models import Sucursales
+from main.serializers import SucursalesSerializer
 from rest_framework.renderers import JSONRenderer 
 from rest_framework.parsers import JSONParser
 
-participante = Participantes.objects.get(id=1) 
+participante = Sucursales.objects.get(id=1) 
 
-serializer = ParticipantesSerializer(participante) 
+serializer = SucursalesSerializer(participante) 
 serializer.data
 
 ```
 Deberiamos ver en consola:
 
 ```
-{'id': 1, 'name': 'Tammie', 'last_name': 'Pineda', 'mail': 'pineda@itbank.com', 'team': 'front', 'proyect_id': 5, 'url_im': 'https://randomuser.me/api/portraits/women/1.jpg'}
+{'id': 1, 'calle': 'AV. CORRIENTES ', 'altura': '3328'}
 ```
 
 En este punto, hemos traducido la instancia del modelo a tipos de datos nativos de Python, podremos ingresar a cualquiera de sus valores como cualquier diccionario:
 
 ```
-serializer.data['mail']
+serializer.data['calle']
 
 ```
 
@@ -88,5 +88,5 @@ content
 Notar b' y las comillas dobles :
 
 ```
-b'{"id":1,"name":"Tammie","last_name":"Pineda","mail":"pineda@itbank.com","team":"front","proyect_id":5,"url_im":"https://randomuser.me/api/portraits/women/1.jpg"}'
+b'{"id":0,"calle":"AV. CABILDO","altura":"2040"}'
 ```
