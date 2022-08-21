@@ -168,6 +168,7 @@ class SucursalesLists(APIView):
 
 Esta vista es una clase, no una funcion como veniamos laburando, la ventaja es que dentro de esta clase podemos crear funciones que automaticamente responde al tipo de metodo del requests. En este ejemplo era un GET.
 
+Como toda vista tenemos que agregarla en `urls.py`.
 
 Ahora como es un requests GET podemos entrar desde el navegador:
 
