@@ -111,6 +111,9 @@ Podemos ver que hay una nueva sucursal en la db!
 Vamos a crear otro serializador, esta  vez de movimientos:
 
 ```python
+
+from .models import Movimientos
+
 class MovimientosSerializer(serializers.ModelSerializer):
      class Meta:
         model = Movimientos
@@ -183,7 +186,7 @@ Ahora como es un requests GET podemos entrar desde el navegador:
 
 http://127.0.0.1:8000/api/sucursales/
 
-Vemos como respuesta todos las sucursales, podemos probar con postman, con requests de python o con fetch desde el chrome.
+Vemos como respuesta todas las sucursales en un template que jamas escribimos! Tambien podemos probar con postman, con requests de python o con fetch desde el chrome.
 
 
 ## POST
@@ -197,7 +200,8 @@ from .serializers import MovimientosSerializer
 
 class MovimientosLists(APIView):
     def post(self, request):
-
+        data=request.data
+        data['fecha']=date.today().strftime('%Y-%m-%d')
         serializer = MovimientosSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -222,51 +226,58 @@ La url es:
 El metodo es `POST` y el body:
 
 ```json
-{"id": 150005,"cliente_id":39549327,"fecha":"2022-08-18","importe":-5000}
+{"cliente_id":35913755,"importe":-5}
+
 ```
-Vemos que el movimiento impacta en la db, si refrescamos la pagina podes observar el nuevo movimiento.
+Vemos que el movimiento impacta en la db, tambien podemos loguearnos con el usuario `cliente` y ver como si refrescamos la pagina podemos observar el nuevo movimiento.
 
 
 ## DELETE
 
 
-Ahora agreguemos un endpoint para borrar un movimiento. Para eso vamos a definir un nuevo método: `DELETE` en la clase `MovimientosDetails`.
+Ahora agreguemos un endpoint para borrar un movimiento. Para eso vamos a definir un nuevo método: `DELETE` en otra clase, vamos a generar la clase `MovimientosDetails`. Esto es por que las urls para pedido seran diferentes, vamos a usar el `id` del movimiento para eliminarlo.
 
 ```python
-def delete(self, request, pk): 
-    #borra un libro con un id determinado (pk)
-    movimiento = Movimientos.objects.filter(pk=pk).first()
-    if movimiento:
-        serializer = MovimientosSerializer(movimiento)
-        movimiento.delete()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(status=status.HTTP_404_NOT_FOUND)
+class MovimientosDetails(APIView):
+     def delete(self, request, movimiento_id): 
+        movimiento = Movimientos.objects.filter(pk=movimiento_id).first()
+        if movimiento:
+            serializer = MovimientosSerializer(movimiento)
+            movimiento.delete()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND) 
 ```
+
+Generamos un metodo para la clase que responde al metodo HTTP del mismo nombre, hicimos una query de la db y borramos. Notar que podriamos borrar sin necesida de serializar, pero la respuesta del borrado es la data, por eso necesitamos serializar.
+
+Fijate que los parametros del metodo incluyen el id del movimiento `movimiento_id` ese valor se lo vamos a pasar en la url:
+
+```python
+    path('api/movimientos/<int:movimiento_id>/',main_views.MovimientosDetails.as_view())
+```
+
+Ahora tenemos que hacer un request DELETE a: `http://127.0.0.1:8000/api/movimientos/150009/` si actualizamos la pagina vemos como el movimiento se borro.
+
 ## PUT
 
-Agreguemos un endpoint para modificar un movimiento. Para eso vamos a definir un nuevo método: `PUT` vamos al archivo `views.py` y agregamos el método a la clase `MovimientosDetails`.
+Agreguemos un endpoint para modificar un movimiento. Para eso vamos a definir un nuevo método (`PUT`)  en la clase `MovimientosDetails`.
 
 
 ```python
-    def put(self, request, pk):
-        movimiento = Movimientos.objects.filter(pk=pk).first()
+    def put(self, request, movimiento_id):
+        movimiento = Movimientos.objects.filter(pk=movimiento_id).first()
         serializer = MovimientosSerializer(movimiento, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)           
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)               
 ```
 
-Ahora probemos modificar el movimiento `135144`, la url es `http://127.0.0.1:8000/api/movimientos/135144/`, el metodo `PUT` y el body:
+Ahora probemos modificar el movimiento `150001`, la url es `http://127.0.0.1:8000/api/movimientos/150001/`, el metodo `PUT` y el body:
 
 ```json
-{   "id": 135144,
-    "importe": -15  }
+{ "importe": -15  }
 ```
-
-Notar que necesitamos solo repetir el `id`.
-
 
 
 # Permisos
