@@ -172,6 +172,11 @@ Como toda vista tenemos que agregarla en `urls.py`.
 
 Ahora como es un requests GET podemos entrar desde el navegador:
 
+```python
+    path('api/sucursales/', main_views.SucursalesLists.as_view(),name='api_sucursales' )
+```
+
+
 http://127.0.0.1:8000/api/sucursales/
 
 Vemos como respuesta todos las sucursales, podemos probar con postman, con requests de python o con fetch desde el chrome.
