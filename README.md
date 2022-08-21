@@ -282,24 +282,27 @@ Ahora probemos modificar el movimiento `150001`, la url es `http://127.0.0.1:800
 
 # Permisos
 
-Asi como tenemos armada la API, cualquier persona puede acceder a la informacion de los movimientos de nuestros clientes. Tenemos que agregar una capa de seguridad. Primero vamos a agregarle permisos de lectura a un cliente para que acceda a sus movimientos y luego permisos de escritura a los empleados y empleadas.
+Asi como tenemos armada la API, cualquier persona puede acceder a modificar informacion de los movimientos de nuestros clientes. Tenemos que agregar una capa de seguridad. Para hacer esto necesitamos agregar un atributo en las clases `MovimientosDetails` y  `MovimientosList` que definen las vista de la api.
 
 
-Para hacer esto necesitamos agregar este atributo en la clase `MovimientosDetails` que define las vista del endpoint `/api/movimientos`:
-
-
+Agreguemos:
 
 ```python
-permission_classes = [permissions.IsAuthenticated]
+...
+class MovimientosDetails(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def delete(self, request, movimiento_id): 
+...
 ```
 
-No olvidar importar esto al principio del archivos `views.py`:
+
+No olvidar importar esto al principio del archivo:
 
 ```python
 from rest_framework import permissions
 ```
 
-Esto obliga a que cualquier requests GET/POST/PUT/DELETE sea hecho por un usuario registrarado. Podemos probar un simple GET y vemos como nos pide credenciales.
+Esto obliga a que cualquier requests GET/POST/PUT/DELETE sea hecho por un usuario registrado. Podemos probar un simple GET y vemos como nos pide credenciales.
 
 ```json
 {
@@ -307,7 +310,37 @@ Esto obliga a que cualquier requests GET/POST/PUT/DELETE sea hecho por un usuari
 }
 ```
 
-Luego dentro de la vista, usando el usuario y chequeando que sea cliente o empleado podemos darle acceso a diferentes metodos. Tambien podemos generar dos endpoints diferentes, para no llenar de condicionales las funciones GET/POST/PUT/DELETE.
+Para hacer un requests ahora, necesitamos hacerlo con un usuario del sitio registrado, probemos con la cuenta `cliente` con la pwd `123`.
+
+Ahora nos gustaria poder discriminar para el mismo endpoint si el request proviene de un cliente o de un empleado, por que como esta nuestra api cualquier usuario del homebanking puede modificar la db.
+
+
+Para esto vamos a generar un nuevo tipo de permiso, similar al `permissions.IsAuthenticated`, primero creemos un archivo `permissions.py` en nuestra app y copiemos esto:
+
+```python
+from rest_framework import permissions
+from .models import ids
+
+class esEmpleado(permissions.BasePermission):
+    def has_permission(self, request, view):
+        username = request.user
+        if ids.objects.filter(username=username).first().tipo == 'empleado':
+            return True
+        else:
+            return False
+```
+
+Por ultimo en las vistas agreguemos esta clase `from .permissions import esEmpleado` y luego modifiquemos los permisos de las vistas para que queden asi:
+
+
+```python
+...
+class MovimientosDetails(APIView):
+    permission_classes = [permissions.IsAuthenticated,esEmpleado]
+    def delete(self, request, movimiento_id): 
+     ...
+
+```
 
 
 # Hipervinculos
