@@ -181,17 +181,135 @@ http://127.0.0.1:8000/api/sucursales/
 
 Vemos como respuesta todos las sucursales, podemos probar con postman, con requests de python o con fetch desde el chrome.
 
+
 ## POST
 
 Ahora queremos generar un nuevo movimiento en la db, necesitamos generar otra vista usando el modelo y el serializador para los movimientos.
 
+```python
+from .models import Movimientos
+from .serializers import MovimientosSerializer 
+
+
+class MovimientosLists(APIView):
+    def post(self, request):
+
+        serializer = MovimientosSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED) 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+```
+
+Y tambien tenemos que agregar la url para este endpoint:
+
+```python
+...
+path('api/movimientos/', main_views.MovimientosLists.as_view(),name='api_movimientos' )
+...
+```
+
+Ahora no podemos acceder desde el navegador, por que solo hace requests GET, necesitamos otra cosa, postman, requests o fetch.
+
+La url es: 
+
+`http://127.0.0.1:8000/api/movimientos/`
+
+El metodo es `POST` y el body:
+
+```json
+{"id": 150005,"cliente_id":39549327,"fecha":"2022-08-18","importe":-5000}
+```
+Vemos que el movimiento impacta en la db, si refrescamos la pagina podes observar el nuevo movimiento.
+
 
 ## DELETE
+
+
+Ahora agreguemos un endpoint para borrar un movimiento. Para eso vamos a definir un nuevo método: `DELETE` en la clase `MovimientosDetails`.
+
+```python
+def delete(self, request, pk): 
+    #borra un libro con un id determinado (pk)
+    movimiento = Movimientos.objects.filter(pk=pk).first()
+    if movimiento:
+        serializer = MovimientosSerializer(movimiento)
+        movimiento.delete()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_404_NOT_FOUND)
+```
 ## PUT
+
+Agreguemos un endpoint para modificar un movimiento. Para eso vamos a definir un nuevo método: `PUT` vamos al archivo `views.py` y agregamos el método a la clase `MovimientosDetails`.
+
+
+```python
+    def put(self, request, pk):
+        movimiento = Movimientos.objects.filter(pk=pk).first()
+        serializer = MovimientosSerializer(movimiento, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)           
+
+```
+
+Ahora probemos modificar el movimiento `135144`, la url es `http://127.0.0.1:8000/api/movimientos/135144/`, el metodo `PUT` y el body:
+
+```json
+{   "id": 135144,
+    "importe": -15  }
+```
+
+Notar que necesitamos solo repetir el `id`.
+
+
 
 # Permisos
 
+Asi como tenemos armada la API, cualquier persona puede acceder a la informacion de los movimientos de nuestros clientes. Tenemos que agregar una capa de seguridad. Primero vamos a agregarle permisos de lectura a un cliente para que acceda a sus movimientos y luego permisos de escritura a los empleados y empleadas.
+
+
+Para hacer esto necesitamos agregar este atributo en la clase `MovimientosDetails` que define las vista del endpoint `/api/movimientos`:
+
+
+
+```python
+permission_classes = [permissions.IsAuthenticated]
+```
+
+No olvidar importar esto al principio del archivos `views.py`:
+
+```python
+from rest_framework import permissions
+```
+
+Esto obliga a que cualquier requests GET/POST/PUT/DELETE sea hecho por un usuario registrarado. Podemos probar un simple GET y vemos como nos pide credenciales.
+
+```json
+{
+    "detail": "Authentication credentials were not provided."
+}
+```
+
+Luego dentro de la vista, usando el usuario y chequeando que sea cliente o empleado podemos darle acceso a diferentes metodos. Tambien podemos generar dos endpoints diferentes, para no llenar de condicionales las funciones GET/POST/PUT/DELETE.
+
+
 # Hipervinculos
 
-# Viewsets y Routers
+Vamos a generar una API navegable, primero vamo a definir la vista del 'home' de la api:
+
+```python
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse as reverse2
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'sucursales': reverse2('api_sucursales', request=request, format=format),
+        'movimientos': reverse2('api_movimientos', request=request, format=format)
+    })
+```
+
+Esto define la lista de endpoints de nuestra api con sus respectivos links.
 
