@@ -5,7 +5,11 @@
 - [instalacion](https://github.com/carabedo/django-restk#instalacion)
 - [serializadores](https://github.com/carabedo/django-rest#serialización)
 - [apiviews](https://github.com/carabedo/django-rest#apiviews)
-- [requests GET PUT DELETE]()
+- [requests methods]()
+    - [GET](https://github.com/carabedo/django-rest#get)
+    - [POST](https://github.com/carabedo/django-rest#post)
+    - [PUT](https://github.com/carabedo/django-rest#put)
+    - [DELETE](https://github.com/carabedo/django-rest#delete)
 - [permisos](https://github.com/carabedo/django-rest#permisos)
 - [hipervinculos]()
 
