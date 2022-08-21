@@ -8,7 +8,7 @@
 - [requests GET PUT DELETE]()
 - [permisos](https://github.com/carabedo/django-rest#permisos)
 - [hipervinculos]()
-- [viewsets y routers]()
+
 
 # Instalacion:
 
