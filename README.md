@@ -8,8 +8,8 @@
 - [requests methods]()
     - [GET](https://github.com/carabedo/django-rest#get)
     - [POST](https://github.com/carabedo/django-rest#post)
-    - [PUT](https://github.com/carabedo/django-rest#put)
     - [DELETE](https://github.com/carabedo/django-rest#delete)
+    - [PUT](https://github.com/carabedo/django-rest#put)
 - [permisos](https://github.com/carabedo/django-rest#permisos)
 - [hipervinculos]()
 
