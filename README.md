@@ -132,7 +132,9 @@ serializer.data
 
 Esta consulta nos devuelve todos los movimientos del cliente con dni 35913755
 
-Hacer esto desde la consola es solo una muestra de como podemos interactuar con la db desde estos objetos nuevos, pero la idea es que poder interactuar con requests HTTP como post, get. Empecemos con el POST, vamos a generar una vista que agregue movimientos a la db.
+Hacer esto desde la consola es solo una muestra de como podemos interactuar con la db desde estos objetos nuevos, pero la idea es que poder interactuar con requests HTTP como post, get. 
+
+Empecemos con el GET, vamos a generar una vista que ante un request GET devuelva un json con la informacion de la tabla sucursales.
 
 # Apiviews
 
