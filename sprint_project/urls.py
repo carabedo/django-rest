@@ -12,7 +12,13 @@ urlpatterns = [
     path('cuentas/',main_views.cuentas, name="cuentas"), 
     path('admin/', admin.site.urls),
     path('accounts/',include('django.contrib.auth.urls')),
-    path('accounts/registro',main_views.registro, name="registro") ]
+    path('accounts/registro',main_views.registro, name="registro"),
+    path('api/sucursales/', main_views.SucursalesLists.as_view(),name='api_sucursales'),
+    path('api/movimientos/', main_views.MovimientosLists.as_view(),name='api_movimientos'),
+    path('api/movimientos/<int:movimiento_id>/',main_views.MovimientosDetails.as_view()),
+    path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' )
+
+    ]
 
 if settings.DEBUG:
     from django.conf.urls.static import static
