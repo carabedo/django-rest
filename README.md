@@ -389,7 +389,7 @@ class PrestamosListCliente(APIView):
 
 URL:
 
-```
+```python
 path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' )
 ```
 
@@ -423,6 +423,8 @@ path('api/prestamos_sucursal/<int:sucursal_id>/', main_views.PrestamosListSucurs
 ```
 Probemos esta url `http://127.0.0.1:8000/api/prestamos_sucursal/1/` con una cuenta de empleado.
 
+Como agregarias una vista para que un cliente pueda cancelar un prestamo? 
+
 # Hipervinculos
 
 Vamos a generar una API navegable, primero vamo a definir la vista del 'home' de la api:
@@ -431,12 +433,21 @@ Vamos a generar una API navegable, primero vamo a definir la vista del 'home' de
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse as reverse2
 
+@login_required
 @api_view(['GET'])
 def api_root(request, format=None):
-    return Response({
-        'sucursales': reverse2('api_sucursales', request=request, format=format),
-        'movimientos': reverse2('api_movimientos', request=request, format=format)
-    })
+    username=request.user.username
+    if ids.objects.filter(username=username).first().tipo == 'empleado':
+        return Response({
+                'sucursales': reverse2('api_sucursales', request=request, format=format),
+                'movimientos': reverse2('api_movimientos', request=request, format=format),
+                'prestamos': reverse2('api_prestamos_sucursal', request=request, format=format),
+            })
+    else:
+        return Response({
+            'sucursales': reverse2('api_sucursales', request=request, format=format)
+        })
+
 ```
 
 Esto define la lista de endpoints de nuestra api con sus respectivos links.
