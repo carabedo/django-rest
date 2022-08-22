@@ -350,7 +350,7 @@ Ahora vamos a generar un endpoint de prestamos que podra ser accedido por client
 
 Serializador:
 
-```
+```python
 from .models import Prestamos
 
 class PrestamosSerializer(serializers.ModelSerializer):
@@ -395,7 +395,32 @@ path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(
 
 Probemos que podemos acceder http://127.0.0.1:8000/api/prestamos/35913755/ desde la cuenta del mismo dni o desde una cuenta de empleado.
 
+Por ultimo vamos a crear un endpoint que liste los prestamos por sucursal:
 
+```python
+from .permissions import esEmpleado
+class PrestamosListSucursal(APIView):
+    permission_classes = [permissions.IsAuthenticated,esEmpleado]
+
+    def get(self, request, sucursal_id): 
+        clientes= Clientes.objects.filter(sucursal=sucursal_id)
+        prestamos=[]
+        for cliente in clientes:
+            if Prestamos.objects.filter(cliente_id=cliente.cliente_id).exists():
+                prestamos.extend(list(Prestamos.objects.filter(cliente_id=cliente.cliente_id)))
+            else:
+                pass
+        if prestamos:
+            serializer = PrestamosSerializer(prestamos,many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response('No hay prestamos asociados a la sucursal', status=status.HTTP_404_NOT_FOUND)
+```
+
+Solo resta agregar la url:
+
+```python
+path('api/prestamos_sucursal/<int:sucursal_id>/', main_views.PrestamosListSucursal.as_view(),name='api_prestamos_sucursal') 
+```
 # Hipervinculos
 
 Vamos a generar una API navegable, primero vamo a definir la vista del 'home' de la api:
