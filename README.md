@@ -330,6 +330,8 @@ class esEmpleado(permissions.BasePermission):
             return False
 ```
 
+Esta clase hereda todo lo necesario de `permissions.BasePermission`, el metodo que necesitamos cambiar es `has_permission` el cual devuele true o false dependiendo nuestra necesidad. Vemos como accedemos a la db para confirmar que tipo de usuario esta haciendo el request.
+
 Por ultimo en las vistas agreguemos esta clase `from .permissions import esEmpleado` y luego modifiquemos los permisos de las vistas para que queden asi:
 
 
@@ -341,6 +343,58 @@ class MovimientosDetails(APIView):
      ...
 
 ```
+
+Probemos acceder a cualquier endpoint con nuestra cuenta de cliente y no tendremos exito. Ahora nuestros endpoints de movimientos solo son accesibles para los empleados.
+
+Ahora vamos a generar un endpoint de prestamos que podra ser accedido por clientes y por empleados. Repasemos, primero generamos el serializador, luego vamos a generar las vistas y por ultimo agregaremos la nueva url.
+
+Serializador:
+
+```
+from .models import Prestamos
+
+class PrestamosSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Prestamos
+        fields = "__all__"
+```
+
+Vista:
+
+```python
+from .serializers import PrestamosSerializer 
+from .models import Prestamos
+class PrestamosListCliente(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, cliente_id): 
+        #podemos chequear que un cliente solo haga GET para sus propios prestamos
+        username = request.user
+        owner=cliente_id
+        try:
+            user=ids.objects.filter(username=username).first()
+            dni=user.cliente_id
+        except:
+            dni = -1
+
+        if (dni == owner or user.tipo == 'empleado' ):
+
+            prestamos = Prestamos.objects.filter(cliente_id=cliente_id)
+            serializer = PrestamosSerializer(prestamos,many=True)
+            if prestamos:
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+```      
+
+URL:
+
+```
+path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' )
+```
+
+Probemos que podemos acceder http://127.0.0.1:8000/api/prestamos/35913755/ desde la cuenta del mismo dni o desde una cuenta de empleado.
 
 
 # Hipervinculos
