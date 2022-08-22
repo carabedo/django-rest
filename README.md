@@ -375,7 +375,6 @@ class PrestamosListCliente(APIView):
             dni=user.cliente_id
         except:
             dni = -1
-
         if (dni == owner or user.tipo == 'empleado' ):
 
             prestamos = Prestamos.objects.filter(cliente_id=cliente_id)
@@ -383,9 +382,9 @@ class PrestamosListCliente(APIView):
             if prestamos:
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
+                return Response('no hay prestamos asociados a este cliente',status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response('no coincide el dni ni es empleado',status=status.HTTP_404_NOT_FOUND)
 ```      
 
 URL:
