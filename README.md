@@ -310,7 +310,9 @@ Esto obliga a que cualquier requests GET/POST/PUT/DELETE sea hecho por un usuari
 }
 ```
 <img src="https://github.com/carabedo/django-rest/raw/main/noauth.png" width=800px />
-Para hacer un requests ahora, necesitamos hacerlo con un usuario del sitio registrado, probemos con la cuenta `cliente` con la pwd `123`.
+
+Para hacer un requests ahora, necesitamos hacerlo con un usuario del sitio registrado, probemos con la cuenta 'cliente' con la pwd `123`.
+
 <img src="https://github.com/carabedo/django-rest/raw/main/auth.png" width=800px />
 
 Ahora nos gustaria poder discriminar para el mismo endpoint si el request proviene de un cliente o de un empleado, por que como esta nuestra api cualquier usuario del homebanking puede modificar la db.
