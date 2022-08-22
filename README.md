@@ -421,6 +421,8 @@ Solo resta agregar la url:
 ```python
 path('api/prestamos_sucursal/<int:sucursal_id>/', main_views.PrestamosListSucursal.as_view(),name='api_prestamos_sucursal') 
 ```
+Probemos esta url `http://127.0.0.1:8000/api/prestamos_sucursal/1/` con una cuenta de empleado.
+
 # Hipervinculos
 
 Vamos a generar una API navegable, primero vamo a definir la vista del 'home' de la api:
