@@ -189,3 +189,40 @@ class PrestamosListCliente(APIView):
                 return Response('no hay prestamos asociados a este cliente',status=status.HTTP_404_NOT_FOUND)
         else:
             return Response('no coincide el dni ni es empleado',status=status.HTTP_404_NOT_FOUND)
+
+
+from .permissions import esEmpleado
+class PrestamosListSucursal(APIView):
+    permission_classes = [permissions.IsAuthenticated,esEmpleado]
+
+    def get(self, request, sucursal_id): 
+        clientes= Clientes.objects.filter(sucursal=sucursal_id)
+        prestamos=[]
+        for cliente in clientes:
+            if Prestamos.objects.filter(cliente_id=cliente.cliente_id).exists():
+                prestamos.extend(list(Prestamos.objects.filter(cliente_id=cliente.cliente_id)))
+            else:
+                pass
+
+        if prestamos:
+            serializer = PrestamosSerializer(prestamos,many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response('No hay prestamos asociados a la sucursal', status=status.HTTP_404_NOT_FOUND)
+
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse as reverse2
+
+
+@login_required
+@api_view(['GET'])
+def api_root(request, format=None):
+    username=request.user.username
+    if ids.objects.filter(username=username).first().tipo == 'empleado':
+        return Response({
+                'sucursales': reverse2('api_sucursales', request=request, format=format),
+                'movimientos': reverse2('api_movimientos', request=request, format=format)
+            })
+    else:
+        return Response({
+            'sucursales': reverse2('api_sucursales', request=request, format=format)
+        })

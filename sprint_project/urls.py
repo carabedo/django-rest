@@ -16,10 +16,13 @@ urlpatterns = [
     path('api/sucursales/', main_views.SucursalesLists.as_view(),name='api_sucursales'),
     path('api/movimientos/', main_views.MovimientosLists.as_view(),name='api_movimientos'),
     path('api/movimientos/<int:movimiento_id>/',main_views.MovimientosDetails.as_view()),
-    path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' )
+    path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' ),
+    path('api/prestamos_sucursal/<int:sucursal_id>/', main_views.PrestamosListSucursal.as_view(),name='api_prestamos_sucursal'),
+    path('api/', main_views.api_root,name='api_root'),
 
     ]
 
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
