@@ -11,7 +11,8 @@
     - [DELETE](https://github.com/carabedo/django-rest#delete)
     - [PUT](https://github.com/carabedo/django-rest#put)
 - [permisos](https://github.com/carabedo/django-rest#permisos)
-- [hipervinculos]()
+- [hipervinculos](https://github.com/carabedo/django-rest#hipervinculos)
+- [viewsets & routers](https://github.com/carabedo/django-rest#viewsets)
 
 
 # Instalacion:
@@ -455,3 +456,43 @@ def api_root(request, format=None):
 
 Esto define la lista de endpoints de nuestra api con sus respectivos links.
 
+# Viewsets
+
+Los viewsets en django son una abstraccion mas de las vistas, primero vimos las funciones vista, luego las clases y ahora los viewsets. Su proposito es evitarnos escribir codigo. Por ejemplo, imagenemos que ahora queremos hacer un endpoint para la tabla 'empleados', que harias? Generas el serializador, vas a las vistas  escribis dos clases una lista y otra details, despues vas a la urls y agregas las dos urls no? Buen con las viewsets y los routers, todo es mas facil:
+
+Empecemos con el modelo:
+
+```python
+from .models import Empleados
+
+class EmpleadosSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Empleados
+        fields = "__all__"
+```
+
+Ahora vamos a las vistas a escribir la clase detalles y otra de listas.... no, usemos un viewset:
+
+```python
+from rest_framework import viewsets
+from .models import Empleados
+from .serializers import EmpleadosSerializer
+
+class EmpleadosViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    This viewset automatically provides `list` and `retrieve` (get al details) actions.
+    """
+    queryset = Empleados.objects.all()
+    serializer_class = EmpleadosSerializer
+```
+
+Listo!
+
+Faltan la urls no?
+
+# Routers
+
+
+```python
+
+```
