@@ -486,7 +486,7 @@ class EmpleadosViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EmpleadosSerializer
 ```
 
-Viste lo facil que fue? Solo le pasamos el modelo y el serializador.
+Viste lo facil que fue? Solo le pasamos el modelo y el serializador. Tambien podrias agregarle permisos: `permission_classes = [permissions.IsAuthenticatedOrReadOnly]` como las vistas por clase.
 
 
 Faltan la urls no?
@@ -521,3 +521,4 @@ http://127.0.0.1:8000/api/empleados/10/
 
 Con mucho menos codigo generamos dos endpoints para la tabla empleados! Podrias reescribir las vistas para otras tablas para practicar.
 
+Cual es la utilidad de esto? Bueno, habra tablas para las cuales los endpoint sean los basicos, en esos casos te conviene usar un viewset asi escribis menos. Pero habra otros endpoints que sean mas complejos y necesites poder definir cada detalles, ahi usas las vistas por clase o por funcion.
