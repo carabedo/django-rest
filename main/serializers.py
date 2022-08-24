@@ -25,3 +25,10 @@ class PrestamosSerializer(serializers.ModelSerializer):
      class Meta:
         model = Prestamos
         fields = "__all__"
+
+from .models import Empleados
+
+class EmpleadosSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Empleados
+        fields = "__all__"

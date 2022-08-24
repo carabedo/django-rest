@@ -226,3 +226,14 @@ def api_root(request, format=None):
         return Response({
             'sucursales': reverse2('api_sucursales', request=request, format=format)
         })
+
+from rest_framework import viewsets
+from .models import Empleados
+from .serializers import EmpleadosSerializer
+
+class EmpleadosViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    This viewset automatically provides `list` and `retrieve` actions.
+    """
+    queryset = Empleados.objects.all()
+    serializer_class = EmpleadosSerializer

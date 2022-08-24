@@ -5,6 +5,15 @@ from django.conf  import settings
 from django.urls import path,include
 
 
+# Router para empleados
+from rest_framework.routers import DefaultRouter
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'empleados', main_views.EmpleadosViewSet,basename="empleados")
+
+
+
+
 urlpatterns = [
     #Creamos un patrón url, en la raíz del sitio (cadena vacía) desde el que llamaremos a la vista views.home que tiene el nombre home.
     path('',main_views.home, name="home"), 
@@ -19,7 +28,7 @@ urlpatterns = [
     path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' ),
     path('api/prestamos_sucursal/<int:sucursal_id>/', main_views.PrestamosListSucursal.as_view(),name='api_prestamos_sucursal'),
     path('api/', main_views.api_root,name='api_root'),
-
+    path('', include(router.urls))
     ]
 
 if settings.DEBUG:
