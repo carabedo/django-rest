@@ -460,7 +460,7 @@ Esto define la lista de endpoints de nuestra api con sus respectivos links.
 
 Los viewsets en django son una abstraccion mas de las vistas, primero vimos las funciones vista, luego las clases y ahora los viewsets. Su proposito es evitarnos escribir codigo. Por ejemplo, imagenemos que ahora queremos hacer un endpoint para la tabla 'empleados', que harias? Generas el serializador, vas a las vistas  escribis dos clases una lista y otra details, despues vas a la urls y agregas las dos urls no? Buen con las viewsets y los routers, todo es mas facil:
 
-Empecemos con el modelo:
+Empecemos con el serializador:
 
 ```python
 from .models import Empleados
@@ -486,6 +486,7 @@ class EmpleadosViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EmpleadosSerializer
 ```
 
+Viste lo facil que fue? Solo le pasamos el modelo y el serializador.
 
 
 Faltan la urls no?
@@ -500,6 +501,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'empleados', main_views.EmpleadosViewSet,basename="empleados")
 ```
+Le estamos dando la ruta `r'\empleados\'`, el viewset y el nombre.
 
 Y ahora agregamos esto en nuestra lista de urls:
 
