@@ -486,13 +486,36 @@ class EmpleadosViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EmpleadosSerializer
 ```
 
-Listo!
+
 
 Faltan la urls no?
 
 # Routers
 
+Un router es una clase que contiene ya todo el codigo necesario para las clases list y details que ya vienen en el viewset. 
 
 ```python
-
+from rest_framework.routers import DefaultRouter
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'empleados', main_views.EmpleadosViewSet,basename="empleados")
 ```
+
+Y ahora agregamos esto en nuestra lista de urls:
+
+```python
+path('api/', include(router.urls))
+```
+
+Listo!
+
+Mira aca:
+
+http://127.0.0.1:8000/api/empleados/
+
+Y ahora mira aca:
+
+http://127.0.0.1:8000/api/empleados/10/
+
+Con mucho menos codigo generamos dos endpoints para la tabla empleados! Podrias reescribir las vistas para otras tablas para practicar.
+
