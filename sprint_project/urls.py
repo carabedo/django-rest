@@ -28,7 +28,7 @@ urlpatterns = [
     path('api/prestamos/<int:cliente_id>/', main_views.PrestamosListCliente.as_view(),name='api_prestamos_list' ),
     path('api/prestamos_sucursal/<int:sucursal_id>/', main_views.PrestamosListSucursal.as_view(),name='api_prestamos_sucursal'),
     path('api/', main_views.api_root,name='api_root'),
-    path('', include(router.urls))
+    path('api/', include(router.urls))
     ]
 
 if settings.DEBUG:
